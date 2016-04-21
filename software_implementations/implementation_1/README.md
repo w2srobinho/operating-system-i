@@ -1,4 +1,4 @@
-## Recommended for 15/03: [Software Implementation] (IC1) Linux System Calls and API based on unit "Foundamentals of Operating Systems"
+## Recommended for 15/03: \[Software Implementation\] (IC1) Linux System Calls and API based on unit "Foundamentals of Operating Systems"
 
 **Avaliable from:** terça, 15 março 2016, 12:00
 
