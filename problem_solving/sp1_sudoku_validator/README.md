@@ -24,7 +24,11 @@ A Sudoku puzzle uses a 9 × 9 grid in which each column and row, as well as each
 
 * A thread to check that each column contains the digits 1 through 9
 * A thread to check that each row contains the digits 1 through 9
-* Nine threads to check that each of the 3 × 3 subgrids contains the digits 1 through 9 ![Sudoku game](resources/sudoku.png) columns, you could create nine separate threads and have each of them check one column.
+* Nine threads to check that each of the 3 × 3 subgrids contains the digits 1 through 9
+
+  ![Sudoku game](resources/sudoku.png)
+
+ columns, you could create nine separate threads and have each of them check one column.
 
 ### Passing Parameters to Each Thread
 
