@@ -1,4 +1,4 @@
-## Recommended for 19/04: [Problem Solving] (SP1) Solve problem based on the unit "Foundamentals of Operating Systems"
+## Recommended for 19/04: \[Problem Solving\] (SP1) Solve problem based on the unit "Foundamentals of Operating Systems"
 
 **Due date:** terça, 28 junho 2016, 11:55
 
@@ -24,7 +24,7 @@ A Sudoku puzzle uses a 9 × 9 grid in which each column and row, as well as each
 
 * A thread to check that each column contains the digits 1 through 9
 * A thread to check that each row contains the digits 1 through 9
-* Nine threads to check that each of the 3 × 3 subgrids contains the digits 1 through 9 ![Sudoku game](resouces/sudoku.png) columns, you could create nine separate threads and have each of them check one column.
+* Nine threads to check that each of the 3 × 3 subgrids contains the digits 1 through 9 ![Sudoku game](resources/sudoku.png) columns, you could create nine separate threads and have each of them check one column.
 
 ### Passing Parameters to Each Thread
 
