@@ -1,4 +1,4 @@
-## Recommended for 10/05: [Software Implementation] (IC4) Linux System Calls and API for Parallel and Concurrent Programming
+## Recommended for 10/05: \[Software Implementation\] (IC4) Linux System Calls and API for Parallel and Concurrent Programming
 **Requested files:** main.cpp (Download)
 
 **Maximum number of files:** 2

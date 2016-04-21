@@ -1,4 +1,4 @@
-## Recommended for 29/03: [Software Implementation] (IC3) Linux System Calls and API based on unit "Processes and Threads"
+## Recommended for 29/03: \[Software Implementation\] (IC3) Linux System Calls and API based on unit "Processes and Threads"
 **Requested files:** main.cpp (Download)
 
 **Maximum number of files:** 2
