@@ -3,14 +3,14 @@ project(validator)
 
 
 set(HEADER_FILES
-    sample1.h
+    sudoku.h
 )
 
 set(SOURCE_FILES
-    sample1.cc
+    sudoku.cpp
 )
 
 add_library(validator
-    ${SOURCE_FILES} 
+    ${SOURCE_FILES}
     ${HEADER_FILES}
 )

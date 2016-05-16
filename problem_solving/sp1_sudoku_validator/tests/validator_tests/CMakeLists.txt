@@ -6,7 +6,7 @@ include_directories(
 )
 
 set(SOURCE_FILES
-    sample1_unittest.cc
+    sudoku_tests.cpp
 )
 
 add_executable(validator_tests
