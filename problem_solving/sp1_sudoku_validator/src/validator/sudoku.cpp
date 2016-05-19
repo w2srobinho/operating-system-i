@@ -6,11 +6,6 @@
 namespace validate {
 
 /*!
- * Size of the Sudoku table LENGTH x LENGTH
- */
-constexpr int LENGTH = 9;
-
-/*!
  * \brief vector with position (x,y) of the first element foreach square
  */
 auto squareLimits = std::vector<std::pair<int, int>> {
