@@ -5,10 +5,19 @@
 #include <functional>
 #include <vector>
 
-namespace validate {
+namespace sudoku {
+
+/*!
+ * \brief Class to validate table of the sudoku game
+ */
+class Validator {
+public:
     /*!
-     * \brief sudoku search type
+     * Constructor of the Validator
+     *
+     * \param std::vector<std::vector<int>>, Matrix representing the Sudoku Table
      */
+    Validator(std::vector<std::vector<int>> matrixSudokuTable);
 
     /*!
      * \brief check if vector is valid for sudoku game
@@ -18,42 +27,32 @@ namespace validate {
      * \return bool: true if vector is valid;
      *               false otherwise
      */
-    bool CheckSudokuVector(const std::vector<int> &chunk);
+    bool CheckVector(const std::vector<int> &chunk);
 
     /*!
-     * \brief create a vector with square elements of the passed position
+     * \brief take the vector square of the matrix passed in constructor
      *
-     * \param const std::vector<std::vector<int>>: matrix representing the sudoku table,
-     *                                             this table isn't changed
      * \param int: square position between 0 and 8
      * \return std::vector<int>, the square in vector format
      */
     std::vector<int> CreateSquareSegment(
-        const std::vector<std::vector<int>> &matrixSudoku,
-        int position);
-
-    /*!
-     * \brief create a vector with column elements of the passed position
-     *
-     * \param const std::vector<std::vector<int>>: matrix representing the sudoku table,
-     *                                             this table isn't changed
-     * \param int: column position
-     * \return std::vector<int>, the column in vector format
-     */
-    std::vector<int> CreateColumnSegment(
-            const std::vector<std::vector<int>> &matrixSudoku,
             int position);
 
     /*!
-     * \brief create a vector with line elements of the passed position
+     * \brief take the vector column of the matrix passed in constructor
      *
-     * \param const std::vector<std::vector<int>>: matrix representing the sudoku table,
-     *                                             this table isn't changed
+     * \param int: column position
+     * \return std::vector<int>, the column in vector format
+     */
+    std::vector<int> CreateColumnSegment(int position);
+
+    /*!
+     * \brief take the vector row of the matrix passed in constructor
+     *
      * \param int: line position
      * \return std::vector<int>, the line in vector format
      */
     std::vector<int> CreateLineSegment(
-            const std::vector<std::vector<int>> &matrixSudoku,
             int position);
 
     /*!
@@ -64,9 +63,23 @@ namespace validate {
      */
     bool CheckResult();
 
+    bool ParallelRun();
+
+private:
     void* ThreadRun(void* threadParam);
 
-    bool ParallelRun(const std::vector<std::vector<int>> &matrixSudoku);
-}
+private:
+    /*!
+    * vector with result of the three segment types
+    */
+    std::vector<std::bitset<9>> validations;
+    /*!
+    * Matrix to validate
+    */
+    std::vector<std::vector<int>> matrixSudoku;
 
+
+};
+
+}
 #endif

@@ -4,26 +4,11 @@
 
 #include "sudoku.h"
 
-namespace validate {
-
+/******************** Constant ********************/
 /*!
  * Size of the Sudoku table LENGTH x LENGTH
  */
 const int LENGTH = 9;
-
-/*!
- * vector with result of the three segment types
- */
-auto validations = std::vector<std::bitset<LENGTH>>(3);
-
-/*!
- * \brief enum segment to represent the search by locals validations
- */
-enum segment {
-    ROW,        ///< This is for search in the row
-    COLUMN,     ///< This is for search in the column
-    SQUARE      ///< This is for search in the square
-};
 
 /*!
  * \brief vector with position (x,y) of the first element foreach square
@@ -40,7 +25,24 @@ const auto squareLimits = std::vector<std::pair<int, int>> {
         std::make_pair(6, 6), /**< ninth square */
 };
 
-bool CheckSudokuVector(const std::vector<int> &chunk) {
+/*!
+ * \brief enum segment to represent the search by locals validations
+ */
+enum segment {
+    ROW,        ///< This is for search in the row
+    COLUMN,     ///< This is for search in the column
+    SQUARE      ///< This is for search in the square
+};
+/***************************************************/
+
+namespace sudoku {
+
+Validator::Validator(std::vector<std::vector<int>> matrixSudokuTable) :
+    validations{std::vector<std::bitset<9>>(3)},
+    matrixSudoku{matrixSudokuTable}
+{ }
+
+bool Validator::CheckVector(const std::vector<int> &chunk) {
     for (std::size_t i = 0; i < (chunk.size() - 1); ++i) {
         int current = chunk[i];
         for (std::size_t j = i + 1; j < chunk.size(); ++j) {
@@ -52,8 +54,7 @@ bool CheckSudokuVector(const std::vector<int> &chunk) {
     return true;
 }
 
-std::vector<int> CreateSquareSegment(
-        const std::vector<std::vector<int>> &matrixSudoku,
+std::vector<int> Validator::CreateSquareSegment(
         int position) {
     assert(position >= 0 && position < LENGTH && "position has been between 1 and 9 inclusive");
 
@@ -69,9 +70,7 @@ std::vector<int> CreateSquareSegment(
     return squareVector;
 }
 
-std::vector<int> CreateColumnSegment(
-        const std::vector<std::vector<int>> &matrixSudoku,
-        int position) {
+std::vector<int> Validator::CreateColumnSegment(int position) {
     assert(position >= 0 && position < LENGTH && "position has been between 0 and 8");
 
     auto columnVector = std::vector<int>{};
@@ -82,28 +81,27 @@ std::vector<int> CreateColumnSegment(
     return columnVector;
 }
 
-std::vector<int> CreateLineSegment(
-        const std::vector<std::vector<int>> &matrixSudoku,
+std::vector<int> Validator::CreateLineSegment(
         int position) {
     assert(position >= 0 && position < LENGTH && "position has been between 0 and 8 inclusive");
 
     return matrixSudoku[position];
 }
 
-bool CheckResult() {
+bool Validator::CheckResult() {
     bool result = validations.at(segment::SQUARE).all();
     return result;/*validations.at(segment::ROW).all() &&
            validations.at(segment::COLUMN).all() &&
            validations.at(segment::SQUARE).all();*/
 }
 
-void* ThreadRun(void* threadParam) {
+void* Validator::ThreadRun(void* threadParam) {
     auto validation = *reinterpret_cast<std::function<void ()>*>(threadParam);
     validation();
     return nullptr;
 }
 
-bool ParallelRun(const std::vector<std::vector<int>> &matrixSudoku)
+bool Validator::ParallelRun()
 {
     /* Array of threads */
     const int NUM_THREADS = 27;     ///< number of threads for check each segment
@@ -121,26 +119,26 @@ bool ParallelRun(const std::vector<std::vector<int>> &matrixSudoku)
          * This lambda has the logical to validate the segment in position
          * passed by "segmentIndex" variable
          */
-        std::function<void ()> thRowArgs = [segmentIndex, &matrixSudoku]() {
-            auto row = CreateLineSegment(matrixSudoku, segmentIndex);
-            if (CheckSudokuVector(row)) {
-                validations[segment::ROW].set(segmentIndex);
+        std::function<void ()> thRowArgs = [this, segmentIndex]() {
+            auto row = CreateLineSegment(segmentIndex);
+            if (CheckVector(row)) {
+                this->validations[segment::ROW].set(segmentIndex);
             }
         };
 
-        std::function<void ()> thColumnArgs = [segmentIndex, &matrixSudoku]() {
-            auto column = CreateLineSegment(matrixSudoku, segmentIndex);
-            if (CheckSudokuVector(column)) {
-                validations[segment::COLUMN].set(segmentIndex);
+        std::function<void ()> thColumnArgs = [this, segmentIndex]() {
+            auto column = CreateLineSegment(segmentIndex);
+            if (CheckVector(column)) {
+                this->validations[segment::COLUMN].set(segmentIndex);
             }
         };
 
-        std::function<void ()> thSquareArgs = [segmentIndex, &matrixSudoku]() {
-            auto square = CreateLineSegment(matrixSudoku, segmentIndex);
-            bool mycheck = CheckSudokuVector(square);
+        std::function<void ()> thSquareArgs = [this, segmentIndex]() {
+            auto square = CreateLineSegment(segmentIndex);
+            bool mycheck = CheckVector(square);
             if (mycheck) {
                 std::cout << "Set 'square' vector on " << segmentIndex << " position\n";
-                validations[segment::SQUARE].set(segmentIndex);
+                this->validations[segment::SQUARE].set(segmentIndex);
                 std::cout << "Test 'square' vector on " << segmentIndex
                           << " position is test: " << validations[segment::SQUARE].test(segmentIndex)
                           << "\n";
