@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <cassert>
 #include <tuple>
 #include <iostream>
@@ -26,33 +27,26 @@ const auto squareLimits = std::vector<std::pair<int, int>> {
 };
 /***************************************************/
 
-static void* ThreadRun(void* threadParam)
-{
-    auto thParams =
-            *reinterpret_cast<std::tuple<sudoku::segment, int, sudoku::Validator*>*>(threadParam);
-
+typedef struct {
     sudoku::segment segmentType;
     int index;
-    sudoku::Validator *validator;
-    std::tie(segmentType, index, validator) = thParams;
+    sudoku::Validator* p_validator;
+} m_tuple;
 
-    std::vector<int> segment;
-    switch (segmentType) {
-        case sudoku::ROW:
-            segment = validator->CreateLineSegment(index);
-            break;
-        case sudoku::COLUMN:
-            segment = validator->CreateColumnSegment(index);
-            break;
-        case sudoku::SQUARE:
-            segment = validator->CreateLineSegment(index);
+void* ThreadRun(void* threadParam)
+{
+    auto thParams =
+            *reinterpret_cast<m_tuple*>(threadParam);
+
+    std::vector<int> segment = thParams.p_validator->CreateSegment(
+            thParams.segmentType,
+            thParams.index);
+
+    if (thParams.p_validator->CheckVector(segment)) {
+        thParams.p_validator->SetSegmentAsValid(thParams.segmentType, thParams.index);
     }
 
-    if (validator->CheckVector(segment)) {
-        validator->SetSegmentAsValid(segmentType, index);
-    }
-
-    return nullptr;
+    pthread_exit(nullptr);
 }
 
 void ParallelRun(sudoku::Validator* validator)
@@ -65,35 +59,35 @@ void ParallelRun(sudoku::Validator* validator)
      * Create all threads
      * Using pthread create
      */
-    int segmentIndex = 0;
     std::cout << "\n\n";
-    for (int i = 0; i < NUM_THREADS; i += 3, ++segmentIndex) {
-
-        /*!
-         * Declare a lambda arguments to pass to the function that the thread executes
-         * This lambda has the logical to validate the segment in position
-         * passed by "segmentIndex" variable
-         */
-        auto thRowArgs = std::make_tuple(sudoku::ROW, segmentIndex, validator);
-        auto thColumnArgs = std::make_tuple(sudoku::COLUMN, segmentIndex, validator);
-        auto thSquareArgs = std::make_tuple(sudoku::SQUARE, segmentIndex, validator);
-
-        /*!
-         * create the threads for check segments passing lambda
-         * earlier created as parameter for thread
-         */
-        pthread_create(&workers[i], nullptr, ThreadRun, &thRowArgs);
-        pthread_create(&workers[i+1], nullptr, ThreadRun, &thColumnArgs);
-        pthread_create(&workers[i+2], nullptr, ThreadRun, &thSquareArgs);
+    auto thArgs = std::vector<m_tuple>{};
+    for (int j = 0; j < 3; ++j) {
+        for (int i = 0; i < LENGTH; ++i) {
+            /*!
+             * Declare a lambda arguments to pass to the function that the thread executes
+             * This lambda has the logical to validate the segment in position
+             * passed by "segmentIndex" variable
+             */
+            m_tuple param = {static_cast<sudoku::segment>(j), i, validator};
+            thArgs.push_back(std::move(param));
+            /*auto thColumnArgs = std::make_tuple(sudoku::COLUMN, segmentIndex, validator);
+            auto thSquareArgs = std::make_tuple(sudoku::SQUARE, segmentIndex, validator);
+    */
+            /*!
+             * create the threads for check segments passing lambda
+             * earlier created as parameter for thread
+             */
+            int thIndex = (j * LENGTH) + i;
+            pthread_create(&workers[thIndex], nullptr, ThreadRun, &thArgs[thIndex]);
+            /*pthread_create(&workers[i+2], nullptr, ThreadRun, &thSquareArgs);
+            pthread_create(&workers[i+1], nullptr, ThreadRun, &thColumnArgs);*/
+        }
     }
-
     /*!
      * Wait each thread finish
      */
-    for (int i = 0; i < NUM_THREADS; i += 3) {
+    for (int i = 0; i < NUM_THREADS; ++i) {
         pthread_join(workers[i], nullptr);
-        pthread_join(workers[i+1], nullptr);
-        pthread_join(workers[i+2], nullptr);
     }
 }
 
@@ -151,13 +145,32 @@ std::vector<int> Validator::CreateLineSegment(int position) const {
     return matrixSudoku[position];
 }
 
+std::vector<int> Validator::CreateSegment(segment segmentType, int index) const {
+    if (segmentType == ROW) {
+        return CreateLineSegment(index);
+    }
+
+    if (segmentType == COLUMN) {
+        return CreateColumnSegment(index);
+    }
+
+    return CreateLineSegment(index);
+}
+
 bool Validator::CheckResult() {
     ParallelRun(this);
 
-    bool result = validations[segment::SQUARE].all();
-    return result;/*validations[segment::ROW].all() &&
-           validations[segment::COLUMN].all() &&
-           validations[segment::SQUARE].all();*/
+    bool result = validations[segment::ROW].all() &&
+                  validations[segment::COLUMN].all() &&
+                  validations[segment::SQUARE].all();
+    return result;
+}
+
+void Validator::SetMatrix(std::vector<std::vector<int>> newSudokuTable) {
+    for (auto bset : validations) {
+        bset.reset();
+    }
+    matrixSudoku = newSudokuTable;
 }
 
 void Validator::SetSegmentAsValid(segment segmentType, int index)
@@ -165,4 +178,12 @@ void Validator::SetSegmentAsValid(segment segmentType, int index)
     validations[segmentType].set(index);
 }
 
+bool Validator::CheckRange(const std::vector<int> &vector) const {
+    for (auto it: vector) {
+        if (it > LENGTH || it < 1) {
+            return false;
+        }
+    }
+    return true;
+}
 }

@@ -2,7 +2,6 @@
 #define VALIDATE_SUDOKU_H
 
 #include <bitset>
-#include <functional>
 #include <vector>
 
 namespace sudoku {
@@ -38,6 +37,23 @@ public:
     bool CheckVector(const std::vector<int> &chunk) const;
 
     /*!
+    * \brief check if the all vectors resultant are true
+    *
+    * \return bool, true if all vectors has been set
+    *               false otherwise
+    */
+    bool CheckResult();
+
+    bool CheckRange(const std::vector<int> &vector) const;
+
+    std::vector<int> CreateSegment(segment segmentType, int index) const;
+
+    void SetMatrix(std::vector<std::vector<int>> newSudokuTable);
+
+    void SetSegmentAsValid(segment segmentType, int index);
+
+private:
+    /*!
      * \brief take the vector square of the matrix passed in constructor
      *
      * \param int: square position between 0 and 8
@@ -60,16 +76,6 @@ public:
      * \return std::vector<int>, the line in vector format
      */
     std::vector<int> CreateLineSegment(int position) const;
-
-    /*!
-     * \brief check if the all vectors resultant are true
-     *
-     * \return bool, true if all vectors has been set
-     *               false otherwise
-     */
-    bool CheckResult();
-
-    void SetSegmentAsValid(segment segmentType, int index);
 
 private:
     /*!
