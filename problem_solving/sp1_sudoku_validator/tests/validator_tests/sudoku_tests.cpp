@@ -84,6 +84,6 @@ TEST_F(SudokuTest, GenerateEigthLineAsVector)
  */
 TEST_F(SudokuTest, ValidateTheSudokuTable)
 {
-    bool result = validator->ParallelRun(sudokuMatrixToTest);
+    bool result = validator->CheckResult();
     ASSERT_TRUE(result);
 }

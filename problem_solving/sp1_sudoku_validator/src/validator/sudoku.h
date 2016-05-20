@@ -6,6 +6,14 @@
 #include <vector>
 
 namespace sudoku {
+/*!
+ * \brief enum segment to represent the search by locals validations
+ */
+enum segment {
+    ROW,        ///< This is for search in the row
+    COLUMN,     ///< This is for search in the column
+    SQUARE      ///< This is for search in the square
+};
 
 /*!
  * \brief Class to validate table of the sudoku game
@@ -27,7 +35,7 @@ public:
      * \return bool: true if vector is valid;
      *               false otherwise
      */
-    bool CheckVector(const std::vector<int> &chunk);
+    bool CheckVector(const std::vector<int> &chunk) const;
 
     /*!
      * \brief take the vector square of the matrix passed in constructor
@@ -35,8 +43,7 @@ public:
      * \param int: square position between 0 and 8
      * \return std::vector<int>, the square in vector format
      */
-    std::vector<int> CreateSquareSegment(
-            int position);
+    std::vector<int> CreateSquareSegment(int position) const;
 
     /*!
      * \brief take the vector column of the matrix passed in constructor
@@ -44,7 +51,7 @@ public:
      * \param int: column position
      * \return std::vector<int>, the column in vector format
      */
-    std::vector<int> CreateColumnSegment(int position);
+    std::vector<int> CreateColumnSegment(int position) const;
 
     /*!
      * \brief take the vector row of the matrix passed in constructor
@@ -52,8 +59,7 @@ public:
      * \param int: line position
      * \return std::vector<int>, the line in vector format
      */
-    std::vector<int> CreateLineSegment(
-            int position);
+    std::vector<int> CreateLineSegment(int position) const;
 
     /*!
      * \brief check if the all vectors resultant are true
@@ -63,10 +69,7 @@ public:
      */
     bool CheckResult();
 
-    bool ParallelRun();
-
-private:
-    void* ThreadRun(void* threadParam);
+    void SetSegmentAsValid(segment segmentType, int index);
 
 private:
     /*!
