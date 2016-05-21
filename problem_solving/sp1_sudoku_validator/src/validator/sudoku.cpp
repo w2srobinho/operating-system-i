@@ -27,16 +27,27 @@ const auto squareLimits = std::vector<std::pair<int, int>> {
 };
 /***************************************************/
 
+/*!
+ * Declare a struct as a tuple to pass params to be executed in the thread
+ */
 typedef struct {
-    sudoku::segment segmentType;
-    int index;
-    sudoku::Validator* p_validator;
+    sudoku::segment segmentType;    ///< The segment type can be ROW, COLUMN or SQUARE
+    int index;                      ///< The position in segment vector
+    sudoku::Validator* p_validator; ///< the pointer to object that has the logical to validate
 } m_tuple;
 
+/*!
+ * Method to run each thread and receive the logical
+ * for validate the segment passed as parameter
+ */
 void* ThreadRun(void* threadParam)
 {
-    auto thParams =
-            *reinterpret_cast<m_tuple*>(threadParam);
+    /*!
+     * Get the parameters passed to function
+     * does a cast from void* to m_tuple*
+     * and after dereference to get m_tuple as value in thParams
+     */
+    auto thParams = *reinterpret_cast<m_tuple*>(threadParam);
 
     std::vector<int> segment = thParams.p_validator->CreateSegment(
             thParams.segmentType,
@@ -49,6 +60,10 @@ void* ThreadRun(void* threadParam)
     pthread_exit(nullptr);
 }
 
+/*!
+ * This function does the parallelization
+ * for check if sudoku matrix table is valid
+ */
 void ParallelRun(sudoku::Validator* validator)
 {
     /* Array of threads */
@@ -64,15 +79,10 @@ void ParallelRun(sudoku::Validator* validator)
     for (int j = 0; j < 3; ++j) {
         for (int i = 0; i < LENGTH; ++i) {
             /*!
-             * Declare a lambda arguments to pass to the function that the thread executes
-             * This lambda has the logical to validate the segment in position
-             * passed by "segmentIndex" variable
+             * Declare arguments to pass to the function that the thread executes
              */
             m_tuple param = {static_cast<sudoku::segment>(j), i, validator};
             thArgs.push_back(std::move(param));
-            /*auto thColumnArgs = std::make_tuple(sudoku::COLUMN, segmentIndex, validator);
-            auto thSquareArgs = std::make_tuple(sudoku::SQUARE, segmentIndex, validator);
-    */
             /*!
              * create the threads for check segments passing lambda
              * earlier created as parameter for thread
