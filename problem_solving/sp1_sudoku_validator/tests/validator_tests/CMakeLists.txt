@@ -15,6 +15,7 @@ add_executable(validator_tests
 
 target_link_libraries(validator_tests
     validator
+    ${CMAKE_THREAD_LIBS_INIT}
     gtest_main
 )
 

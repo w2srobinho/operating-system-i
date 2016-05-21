@@ -26,6 +26,10 @@ public:
      *                                                         the Sudoku Table
      */
     Validator(std::vector<std::vector<int>> matrixSudokuTable);
+    /*!
+     * The destructor of Validator
+     */
+    ~Validator();
 
     /*!
      * \brief check if vector is valid for sudoku game
@@ -116,6 +120,10 @@ private:
     * Matrix to validate
     */
     std::vector<std::vector<int>> matrixSudoku;
+    /*!
+     * mutex to control the set bit in SetSegmentAsValid
+     */
+    pthread_mutex_t result_mtx;
 };
 
 }

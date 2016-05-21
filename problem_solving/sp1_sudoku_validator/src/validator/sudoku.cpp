@@ -1,7 +1,6 @@
 #include <pthread.h>
 #include <cassert>
 #include <tuple>
-#include <iostream>
 
 #include "sudoku.h"
 
@@ -74,7 +73,6 @@ void ParallelRun(sudoku::Validator* validator)
      * Create all threads
      * Using pthread create
      */
-    std::cout << "\n\n";
     auto thArgs = std::vector<m_tuple>{};
     for (int j = 0; j < 3; ++j) {
         for (int i = 0; i < LENGTH; ++i) {
@@ -89,8 +87,6 @@ void ParallelRun(sudoku::Validator* validator)
              */
             int thIndex = (j * LENGTH) + i;
             pthread_create(&workers[thIndex], nullptr, ThreadRun, &thArgs[thIndex]);
-            /*pthread_create(&workers[i+2], nullptr, ThreadRun, &thSquareArgs);
-            pthread_create(&workers[i+1], nullptr, ThreadRun, &thColumnArgs);*/
         }
     }
     /*!
@@ -103,10 +99,16 @@ void ParallelRun(sudoku::Validator* validator)
 
 namespace sudoku {
 
+Validator::~Validator() {
+    pthread_mutex_destroy(&result_mtx);
+}
+
 Validator::Validator(std::vector<std::vector<int>> matrixSudokuTable) :
     validations{std::vector<std::bitset<9>>(3)},
     matrixSudoku{matrixSudokuTable}
-{ }
+{
+    pthread_mutex_init(&result_mtx, nullptr);
+}
 
 bool Validator::CheckVector(const std::vector<int> &chunk) const
 {
@@ -164,28 +166,33 @@ std::vector<int> Validator::CreateSegment(segment segmentType, int index) const 
         return CreateColumnSegment(index);
     }
 
-    return CreateLineSegment(index);
+    return CreateSquareSegment(index);
 }
 
 bool Validator::CheckResult() {
     ParallelRun(this);
 
-    bool result = validations[segment::ROW].all() &&
-                  validations[segment::COLUMN].all() &&
-                  validations[segment::SQUARE].all();
+    bool result = validations[ROW].all() &&
+                  validations[COLUMN].all() &&
+                  validations[SQUARE].all();
     return result;
 }
 
 void Validator::SetMatrix(std::vector<std::vector<int>> newSudokuTable) {
-    for (auto bset : validations) {
+    for (auto &bset : validations) {
         bset.reset();
     }
+    assert(validations[ROW].none() && "ROW segment should be all unset");
+    assert(validations[COLUMN].none() && "COLUMN segment should be all unset");
+    assert(validations[SQUARE].none() && "SQUARE segment should be all unset");
     matrixSudoku = newSudokuTable;
 }
 
 void Validator::SetSegmentAsValid(segment segmentType, int index)
 {
+    pthread_mutex_lock(&result_mtx);
     validations[segmentType].set(index);
+    pthread_mutex_unlock(&result_mtx);
 }
 
 bool Validator::CheckRange(const std::vector<int> &vector) const {
@@ -196,4 +203,5 @@ bool Validator::CheckRange(const std::vector<int> &vector) const {
     }
     return true;
 }
+
 }

@@ -10,6 +10,13 @@ include(setup)
 # sources
 add_subdirectory(src/validator)
 
+include_directories(
+        ${validator_SOURCE_DIR})
+add_executable(sudoku main.cpp)
+target_link_libraries(sudoku
+        ${CMAKE_THREAD_LIBS_INIT}
+        validator)
+
 # third_party
 if(build_tests)
     # googletest and googlemock dependencies

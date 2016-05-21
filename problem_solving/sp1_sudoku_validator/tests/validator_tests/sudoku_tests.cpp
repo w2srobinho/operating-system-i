@@ -101,6 +101,21 @@ TEST_F(SudokuTest, InvalidateTheSudokuTable)
     ASSERT_FALSE(result);
 }
 
+TEST_F(SudokuTest, InvalidateOutRangeInTable)
+{
+    validator->SetMatrix({{1, 2, 3, 4, 5, 3, 7, 8, 9},
+                          {4, 5, 6, 7, 12, 9, 1, 2, 3},
+                          {7, 8, 9, 1, 2, 3, 4, 5, 6},
+                          {2, 3, 4, 5, 6, 7, 8, 9, 1},
+                          {5, 6, 7, 8, 9, 1, 2, 3, 4},
+                          {8, 9, 1, 2, 3, 4, 5, 6, 7},
+                          {3, 4, 5, 6, 7, 8, 9, 8, 2},
+                          {6, 7, 8, 9, 5, 2, 3, 4, 5},
+                          {9, 0, 2, 3, 4, 5, 6, 7, 8}});
+    bool result = validator->CheckResult();
+    ASSERT_FALSE(result);
+}
+
 /*!
  * Test to extract each square as vector of the sudoku table
  */
