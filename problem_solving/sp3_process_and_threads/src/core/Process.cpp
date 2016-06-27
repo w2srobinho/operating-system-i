@@ -1,6 +1,6 @@
 /*
  * File:   Process.cpp
- * Author: <preencher>
+ * Author: Willian de Souza
  *
  * Created on August 31, 2015, 7:49 AM
  */

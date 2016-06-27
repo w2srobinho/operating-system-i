@@ -1,6 +1,6 @@
 /*
  * File:   Scheduler.h
- * Author: <PREENCHER>
+ * Author: Willian de Souza
  *
  * Created on September 27, 2015, 11:19 AM
  */

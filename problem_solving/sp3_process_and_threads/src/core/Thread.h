@@ -1,6 +1,6 @@
 /*
  * File:   Thread.h
- * Author: <preencher>
+ * Author: Willian de Souza
  *
  * Created on September 27, 2015, 10:30 AM
  */

@@ -1,6 +1,6 @@
 /*
  * File:   Queue.h
- * Author: <preencher>
+ * Author: Willian de Souza
  *
  * Created on September 27, 2015, 11:28 AM
  */
