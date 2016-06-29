@@ -9,9 +9,9 @@
 
 namespace BOOOS
 {
-int Task:: __tid_counter;
-volatile Task * Task:: __running;
-Task * Task:: __main;
+int Task::__tid_counter = 0;
+volatile Task* Task::__running;
+volatile Task* Task::__main;
 /*!
  * The private Constructor of the task, initialize the task ID and the context
  */
@@ -69,12 +69,13 @@ Task::~Task()
     delete [] _stack;
 }
 
-void Task::exit(int code)
+void Task::exit(int)
 {
     /*!
      * Finish this task and return the execution for main task
      */
-    pass_to(Task::__main, FINISHING);
+     _state = FINISHING;
+    //pass_to(Task::__main, FINISHING);
 }
 
 void Task::pass_to(Task *t, State s)

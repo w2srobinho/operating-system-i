@@ -47,7 +47,7 @@ private:
      */
     static int __tid_counter;           ///< task ID counter
     static volatile Task* __running;    ///< task already running
-    static Task* __main;                ///< main task
+    static volatile Task* __main;       ///< main task
     /*!
      * created by reference the UML on exercise,
      * but isn't necessary in this block
