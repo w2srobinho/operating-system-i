@@ -3,37 +3,22 @@
 
 #include "Queue.h"
 
-
-class MyElement : public BOOOS::Queue::Element {
-public:
-    MyElement(std::string str) : _name(str) {}
-
-    virtual ~MyElement() {}
-
-    std::string & name() { return _name; }
-
-private:
-    std::string _name;
-};
-
-TEST(QueueTest, test_creation_destruction)
+TEST(QueueTest, creation_destruction)
 {
     BOOOS::Queue q;
-
     ASSERT_EQ(0, q.length());
     ASSERT_EQ(nullptr, q.head()->next());
     ASSERT_EQ(nullptr, q.head()->prev());
 }
 
-TEST(QueueTest, test_insertion)
+TEST(QueueTest, insertion)
 {
+    auto person1 = new BOOOS::Queue::Element();
+    auto person2 = new BOOOS::Queue::Element();
+    auto person3 = new BOOOS::Queue::Element();
+    auto person4 = new BOOOS::Queue::Element();
+
     BOOOS::Queue q;
-
-    MyElement * person1 = new MyElement("João");
-    MyElement * person2 = new MyElement("Pedro");
-    MyElement * person3 = new MyElement("Augusto");
-    MyElement * person4 = new MyElement("Fábio");
-
     q.insert(person1);
     q.insert(person2);
     q.insert(person3);
@@ -42,33 +27,33 @@ TEST(QueueTest, test_insertion)
     ASSERT_EQ(person1, q.head()->next()); // head
     ASSERT_EQ(person4, q.head()->prev()); // tail
 
-    MyElement * tmp = dynamic_cast<MyElement*>(q.head()->next());
+    auto tmp = q.head()->next();
     ASSERT_EQ(tmp, person1);
 
-    tmp = dynamic_cast<MyElement*>(tmp->next());
+    tmp = tmp->next();
     ASSERT_EQ(tmp, person2);
 
-    tmp = dynamic_cast<MyElement*>(tmp->next());
+    tmp = tmp->next();
     ASSERT_EQ(tmp, person3);
 
-    tmp = dynamic_cast<MyElement*>(tmp->next());
+    tmp = tmp->next();
     ASSERT_EQ(tmp, person4);
 }
 
-TEST(QueueTest, test_remotion) {
+TEST(QueueTest, remotion)
+{
+    auto person1 = new BOOOS::Queue::Element();
+    auto person2 = new BOOOS::Queue::Element();
+    auto person3 = new BOOOS::Queue::Element();
+    auto person4 = new BOOOS::Queue::Element();
+
     BOOOS::Queue q;
-
-    MyElement * person1 = new MyElement("João");
-    MyElement * person2 = new MyElement("Pedro");
-    MyElement * person3 = new MyElement("Augusto");
-    MyElement * person4 = new MyElement("Fábio");
-
     q.insert(person1);
     q.insert(person2);
     q.insert(person3);
     q.insert(person4);
 
-    MyElement * removed_person = dynamic_cast<MyElement *>(q.remove());
+    auto removed_person = q.remove();
     ASSERT_EQ(person1, removed_person);
     delete removed_person;
 
