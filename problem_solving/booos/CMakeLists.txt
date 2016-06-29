@@ -10,13 +10,6 @@ include(setup)
 # sources
 add_subdirectory(src/core)
 
-#include_directories(
-#        ${core_SOURCE_DIR})
-#add_executable(booos main.cpp)
-#target_link_libraries(booos
-#        ${CMAKE_THREAD_LIBS_INIT}
-#        core)
-
 # third_party
 if(build_tests)
     # googletest and googlemock dependencies
