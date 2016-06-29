@@ -1,10 +1,12 @@
 ## Recommended for 14/06: \[Problem Solving\] (SP3) Solve problem based on the unit "Processes and Threads"
-
 **Due date:** terça, 28 junho 2016, 11:55
 
 **Requested files:** `Process.h`, `Queue.h`, `Scheduler.h`, `Scheduling_Queue.h`, `Thread.h`, `Process.cpp`, `Queue.cpp`, `Scheduler.cpp`, `Scheduling_Queue.cpp`, `Thread.cpp`, `TimerMediator.cpp`, `Traits.h`
+
 **Maximum upload file size:** 1 MiB
+
 **Type of work:** Group work SP3 - Agrupamento 1: Grupo Único.
+
 **Smallest Remaining Time First**
 
 ##### Esta é a avaliação de 'Solução de Problemas 5" (SP5).

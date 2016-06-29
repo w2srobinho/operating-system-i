@@ -1,10 +1,12 @@
 ## Recommended for 03/05: \[Problem Solving\] (SP2) Solve problem based on the unit "Memory Management"
-
 **Due date:** terça, 28 junho 2016, 11:55
 
 **Requested files:** `MemoryManager.cpp`, `MemoryManager.h`, `Traits.h`
+
 **Maximum number of files:** 4
+
 **Maximum upload file size:** 128 KiB
+
 **Type of work:** Group work SP2 - Agrupamento 1: Grupo Único.
 
 ##### Esta é a avaliação de 'Solução de Problemas 2" (SP2).

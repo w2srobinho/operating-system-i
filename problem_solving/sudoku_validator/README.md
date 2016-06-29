@@ -1,9 +1,10 @@
 ## Recommended for 19/04: \[Problem Solving\] (SP1) Solve problem based on the unit "Foundamentals of Operating Systems"
-
 **Due date:** terça, 28 junho 2016, 11:55
 
 **Maximum number of files:** 4
+
 **Maximum upload file size:** 128 KiB
+
 **Type of work:** Group work SP1 - Agrupamento 1: Grupo Único.
 
 ##### Esta é a avaliação de "Solução de Problemas 1" (SP1).
