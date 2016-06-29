@@ -23,7 +23,7 @@ PS: O professor ainda está criando o mecanismo para execução e correção aut
 
 Neste trabalho de "Solução de Problemas" deve-se estender a classe "**Queue**" com a construção de uma classe para abstrair processos em nível de usuários - na prática, threads. A classe implementada será chamada de **Task** (tarefa). Lembre-se que uma classe é uma estrutura de dados, logo, nossa classe **Task** será o PCB (**Proccess Control Block**) do sistema. A partir dessa descrição será disponibilizado um gabarito em C++ como no código abaixo, geralmente incompleto, e um diagrama UML de uma versão completa da solução, como na imagem abaixo.
 
-![Task UML](resources/task.png)
+![Task UML](resources/task.png "Task UML")
 
 ```c++
 /*

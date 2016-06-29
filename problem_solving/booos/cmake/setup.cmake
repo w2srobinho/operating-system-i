@@ -14,5 +14,5 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
     set(warnings "-Wall -Wextra -Werror -Wno-error=unused-parameter")
 
     # add c++11 support
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings} -std=c++0x")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings} -std=c++11")
 endif()
