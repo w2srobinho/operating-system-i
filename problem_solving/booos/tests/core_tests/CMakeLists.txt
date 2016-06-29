@@ -6,8 +6,8 @@ include_directories(
 )
 
 set(SOURCE_FILES
-        core_tests.cpp
-)
+        queue_tests.cpp
+        task_tests.cpp)
 
 add_executable(core_tests
     ${SOURCE_FILES}
